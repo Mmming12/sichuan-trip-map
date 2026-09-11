@@ -1,22 +1,25 @@
 # 成都 · 三星堆 · 九寨沟旅行地图
 
-手机、电脑浏览器均可使用的静态旅行地图。无需 ChatGPT 登录，无需地图 API Key。
+[手机／电脑打开旅行地图](https://mmming12.github.io/sichuan-trip-map/)。无需 ChatGPT 登录。
 
-基于 [trip-map-builder](https://github.com/hiyeshu/trip-map-builder) 的 Leaflet＋行程卡片方案制作。采用 GitHub Pages 托管；同一份源码也可以导入 Vercel。
+基于 [trip-map-builder](https://github.com/hiyeshu/trip-map-builder) 的 Leaflet＋行程卡片方案，使用 GitHub Pages 托管。包括按天行程、返程方案比较、高铁与接驳、餐厅、酒店位置和高德保存路线。
 
-## 本地打开
+## 固定行程与高德数据
 
-双击 `index.html`，或运行 `python -m http.server 8765` 后访问 `http://localhost:8765`。地图底图和外部导航需要联网。
+`amap-data.js` 保存 12 个核对过的地点和 10 条步行／公交路线。页面可筛选区域、查看路线图、展开换乘步骤，或跳转高德重新查询。浏览页面不消耗作者的高德 API 用量；只在本机查询并重新发布数据时使用 Web 服务 Key。JS API Key 和安全密钥本版未使用，所有密钥均留在本机，不提交仓库。
 
-## 部署
+保存结果不是实时导航。公交请求时间不是发车时刻；三星堆接驳约 39 分钟含步行、不含等车，具体班次仍待确认。铁路与九旅悦行接驳须单独核实。酒店每间约 500 元是预算，出行日房价、房态、餐厅营业及菜单均未确认。
 
-- GitHub Pages：Settings → Pages，选择 main 分支、根目录。`.nojekyll` 保证直接发布静态文件。
-- Vercel：导入此 GitHub 仓库，Framework 选择 Other，根目录为仓库根目录，无需构建命令。发布后使用可公开访问的正式域名。
+## 本地预览与数据导出
 
-## 验证
+双击 `index.html`，或运行 `python -m http.server 8765` 后访问 `http://localhost:8765`。底图及外部导航需要联网。
 
-`node --check trip.js`，然后 `node check.cjs`。检查日期视图、返程切换、底图组件缺失时的备用视图和本地文件引用。
+作者数据维护工具 `python tools/refresh-amap.py` 默认只读取用户主目录 `.trip-map-builder/amap-research/` 私有缓存，不发送 API 请求。`--fetch --max-requests 10` 才查询缺少的路线，读取该目录上级的 `amap.env` 中 `AMAP_WEB_SERVICE_KEY`，串行请求，出错停止。已存在的缓存不会自动更新；需先归档目标缓存，再显式查询。工具依赖作者已核对的地点缓存，不是独立地点搜索器。
 
-## 数据说明
+## 发布与验证
 
-行程日期为 2026-09-25—28，29 日返程仍为待选分支。交通时刻、酒店和餐厅为带来源的参考资料，均未预订。具体核验边界及照片署名见 `sources.html`。图钉不连成假设交通路线；高德链接用于查询实际公共交通。
+GitHub Pages 使用 main 分支根目录，`.nojekyll` 保证直接发布静态文件。普通访问者无需配置 API。
+
+运行 `node --check trip.js`、`node check.cjs`、`python tools/check-amap.py`，检查视图、返程切换、区域筛选、坐标和路线绘制、缺失地图时的文字备用界面，以及路线解析的空结果和错误处理。此为逻辑验证，未代替手机浏览器实测。
+
+行程为 2026-09-25—28，29 日返程仍为待选分支；全部未预订。详细来源、数据边界和照片署名见 `sources.html`。
