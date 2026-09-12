@@ -43,7 +43,7 @@ function addMarker(key,i){
  const popup=`<b>${esc(p.name)}</b><br>参考位置 · ${link(poiUrl(p),'高德查公交 / 导航')}`;
  if(USE_AMAP){
   const marker=new AMap.Marker({position:ll,content:html,anchor:'center',title:p.name,map});
-  marker.openPopup=()=>{map.closeInfoWindow();new AMap.InfoWindow({content:popup,offset:new AMap.Pixel(0,-18)}).open(map,ll);};
+  marker.openPopup=()=>{map.clearInfoWindow();new AMap.InfoWindow({content:popup,offset:new AMap.Pixel(0,-18)}).open(map,ll);};
   marker.on('click',marker.openPopup);
   const button=marker.getContent();if(button?.addEventListener)button.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();marker.openPopup();}});
   return marker;
@@ -51,7 +51,7 @@ function addMarker(key,i){
  const icon=L.divIcon({className:'',html,iconSize:[30,30],iconAnchor:[15,15]});
  return L.marker(ll,{icon,alt:p.name}).bindPopup(popup).addTo(layer);
 }
-function clearMap(){if(USE_AMAP){map.closeInfoWindow();map.clearMap();}else layer.clearLayers();markers={};}
+function clearMap(){if(USE_AMAP){map.clearInfoWindow();map.clearMap();}else layer.clearLayers();markers={};}
 function drawMap(){if(!map)return;document.querySelector('.map-note span').textContent='地点示意 · 点击图钉查看';clearMap();bounds=DAY_POIS[active].map((key,i)=>{markers[key]=addMarker(key,i+1);return mapPoint(POIS[key].gcj);});fit();}
 function fit(){if(map&&bounds?.length){if(USE_AMAP)map.setFitView(null,true,[35,35,35,35],14);else map.fitBounds(bounds,{padding:[35,35],maxZoom:14});}}
 function focusPoi(key){markers[key]??=addMarker(key,'•');if(USE_AMAP)map.setZoomAndCenter(14,mapPoint(POIS[key].gcj));else map.setView(mapPoint(POIS[key].gcj),14);markers[key].openPopup();}

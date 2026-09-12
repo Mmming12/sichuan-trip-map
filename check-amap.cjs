@@ -6,10 +6,11 @@ async function run(){
  let click,instances=0,drawn=[],fitted=0;
  const nodes=new Map(),element=()=>({innerHTML:'',disabled:false,addEventListener(){},setAttribute(){},scrollIntoView(){}});
  const document={documentElement:{dataset:{map:'amap'}},getElementById(id){if(!nodes.has(id))nodes.set(id,element());return nodes.get(id);},querySelectorAll(){return [];},querySelector(){return element();},addEventListener(n,f){if(n==='click')click=f;}};
- const AMap={Map:class{constructor(){instances++;}on(){}clearMap(){drawn=[];}closeInfoWindow(){}setFitView(){fitted++;}setZoomAndCenter(z,ll){assert(ll[0]>100&&ll[1]<40);}},Marker:class{constructor(o){assert(o.position[0]>100&&o.position[1]<40);}on(){}getContent(){return '';}},Pixel:class{},InfoWindow:class{open(){}},Polyline:class{constructor(o){drawn.push(o);}}};
+ const AMap={Map:class{constructor(){instances++;}on(){}clearMap(){drawn=[];}clearInfoWindow(){}setFitView(){fitted++;}setZoomAndCenter(z,ll){assert(ll[0]>100&&ll[1]<40);}},Marker:class{constructor(o){assert(o.position[0]>100&&o.position[1]<40);}on(){}getContent(){return '';}},Pixel:class{},InfoWindow:class{open(){}},Polyline:class{constructor(o){drawn.push(o);}}};
  const ctx=vm.createContext({document,window:{AMap,loadTripAmap:async()=>{}},AMap,URLSearchParams,innerWidth:400});
  vm.runInContext(fs.readFileSync('amap-data.js','utf8'),ctx);vm.runInContext(source,ctx);
  await new Promise(resolve=>setImmediate(resolve));
+ assert.equal(nodes.get('map').innerHTML,'','Map initialization must not enter fallback');
  for(const tab of ['25','26','27','28','hotels','routes'])click({target:{closest:q=>q==='[data-tab]'?{dataset:{tab}}:null}});
  vm.runInContext("showSavedRoute('sxdMuseum',0);focusPoi('hotelEast');",ctx);
  assert.equal(instances,1);assert(fitted>6);

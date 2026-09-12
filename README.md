@@ -2,6 +2,8 @@
 
 > 2026-09-12：高德版生产根网址已验证跳转到 `/amap.html`，13 项页面／静态资源与本地一致，真实高德初始化鉴权成功，现有逻辑检查和源码凭据扫描通过。当前无可用浏览器，手机／桌面真实底图及交互仍待实测；HTTP 和 mock 检查不代表视觉验收。
 
+同日修复：用户反馈所有浏览器均提示地图无法加载。地图初始化清理弹窗时误用了不存在的 `closeInfoWindow()`，已改为高德实际提供的 `clearInfoWindow()`，同时修正测试替身并增加初始化不得进入失败界面的回归断言。回归检查修复前失败、修复后通过；最终手机显示仍需真实浏览器确认。
+
 [高德地图版](https://sichuan-trip-amap.vercel.app/) · [原版地图](https://mmming12.github.io/sichuan-trip-map/)。均可手机／电脑免登录打开。
 
 基于 [trip-map-builder](https://github.com/hiyeshu/trip-map-builder) 的 Leaflet＋行程卡片方案，使用 GitHub Pages 托管。包括按天行程、返程方案比较、高铁与接驳、餐厅、酒店位置和高德保存路线。
