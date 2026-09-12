@@ -1,0 +1,7 @@
+.git
+.env*
+tools
+check*.cjs
+README.md
+__pycache__
+*.pyc

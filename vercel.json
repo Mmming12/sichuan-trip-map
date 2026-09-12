@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [{"source":"/", "destination":"/amap.html", "permanent":false}],
+  "rewrites": [
+    {"source":"/_AMapService/:path*", "destination":"/api/amap?path=:path*"}
+  ],
+  "headers": [
+    {"source":"/(.*)","headers":[{"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"}]}
+  ]
+}
